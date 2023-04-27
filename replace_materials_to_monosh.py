@@ -1,6 +1,10 @@
+###
+### Unityを起動しなおすと置き換えが反映される
+###
+
 import os
 from UnityEngine import Texture, Shader, Material
-from UnityEditor import AssetDatabase, Selection
+from UnityEditor import AssetDatabase, Selection, ImportAssetOptions
 import shutil
 
 def create_material(material_name):
@@ -8,19 +12,14 @@ def create_material(material_name):
     new_material = Material(Shader.Find("Silent/Filamented (Roughness setup)"))
     new_material.name = material_name
 
-
-    # set the texture properties if they exist
-
+    # get the texture dir
     albedo_texture_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname((AssetDatabase.GetAssetPath(Selection.activeObject))))), "Textures")
-    albedo_texture_path = os.path.join(albedo_texture_dir, "T" + material_name[2:] + "_D.png")
-    
-    normal_texture_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname((AssetDatabase.GetAssetPath(Selection.activeObject))))), "Textures")
-    normal_texture_path = os.path.join(albedo_texture_dir, "T" + material_name[2:] + "_N.png")
 
-    roughness_texture_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname((AssetDatabase.GetAssetPath(Selection.activeObject))))), "Textures")
+    albedo_texture_path = os.path.join(albedo_texture_dir, "T" + material_name[2:] + "_D.png")
+    normal_texture_path = os.path.join(albedo_texture_dir, "T" + material_name[2:] + "_N.png")
     roughness_texture_path = os.path.join(albedo_texture_dir, "T" + material_name[2:] + "_R.png")
 
-
+    # set the texture properties if they exist
     if AssetDatabase.LoadAssetAtPath(albedo_texture_path, Texture):
         new_material.SetTexture(
             "_MainTex", AssetDatabase.LoadAssetAtPath(albedo_texture_path, Texture))
@@ -41,6 +40,9 @@ def create_material(material_name):
     AssetDatabase.CreateAsset(
         new_material, os.path.join(asset_path, material_name + ".mat"))
     AssetDatabase.SaveAssets()
+    ### 現状エディタ再起動しないとマテリアル差し替え反映されない。 ↓ も効かない
+    # AssetDatabase.ImportAsset(os.path.join(asset_path, material_name + ".mat"), ImportAssetOptions.ForceUpdate)
+    # AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate)
     print(asset_path + "/" + material_name)
 
 
