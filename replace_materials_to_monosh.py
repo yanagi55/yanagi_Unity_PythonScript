@@ -36,12 +36,12 @@ def create_material(material_name):
 
     # save the new material
     asset_path = (os.path.dirname((AssetDatabase.GetAssetPath(Selection.activeObject))))
-    print(asset_path)
     if not os.path.exists(asset_path):
         os.makedirs(asset_path)
     AssetDatabase.CreateAsset(
         new_material, os.path.join(asset_path, material_name + ".mat"))
     AssetDatabase.SaveAssets()
+    print(asset_path + "/" + material_name)
 
 
 # get the selected material objects
@@ -56,7 +56,6 @@ for obj in selected_objects:
         if not os.path.exists(backup_path):
             os.makedirs(backup_path)
         shutil.copy(asset_path, os.path.join(backup_path, material_name + ".mat"))
-        print(backup_path)
         
         # create a new material using the selected material object's name
         create_material(material_name)
