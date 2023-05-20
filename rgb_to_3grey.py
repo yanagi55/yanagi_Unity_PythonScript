@@ -21,7 +21,8 @@ def split_rgb_to_grayscale(selected_textures):
         image = Image.open(io.BytesIO(texture_data))
 
         # R、G、Bのチャンネルに分割
-        r, g, b = image.split()
+        channels = image.split()[:3]
+        r, g, b = channels
 
         # チャンネルをグレースケールに変換
         r_gray = r.convert('L')
