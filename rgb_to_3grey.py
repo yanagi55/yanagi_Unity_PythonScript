@@ -31,9 +31,9 @@ def split_rgb_to_grayscale(selected_textures):
 
         # 保存するファイル名を生成
         filename = os.path.splitext(texture_path)[0]  # 拡張子を除いたファイル名
-        r_gray_filename = f"{filename}_R.png"
-        g_gray_filename = f"{filename}_G.png"
-        b_gray_filename = f"{filename}_B.png"
+        r_gray_filename = f"{filename}_01Channel.png"
+        g_gray_filename = f"{filename}_02Channel.png"
+        b_gray_filename = f"{filename}_03Channel.png"
 
         # グレースケール画像を保存
         r_gray.save(r_gray_filename)
