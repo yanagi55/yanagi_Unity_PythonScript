@@ -1,5 +1,5 @@
 from UnityEngine import Texture, Shader, Material, ImageConversion, Debug
-from UnityEditor import AssetDatabase, Selection
+from UnityEditor import AssetDatabase, Selection, TextureImporter
 from PIL import Image
 import io
 import os
@@ -8,6 +8,11 @@ def split_rgb_to_grayscale(selected_textures):
     for texture_path in selected_textures:
         # テクスチャを読み込む
         texture = AssetDatabase.LoadAssetAtPath(texture_path, Texture)
+
+        # テクスチャが読み書き可能でない場合はチェックを入れる
+        if not TextureImporter.GetAtPath(texture_path).isReadable:
+            TextureImporter.GetAtPath(texture_path).isReadable = True
+            AssetDatabase.ImportAsset(texture_path)
 
         # テクスチャをバイト配列に変換
         texture_data = ImageConversion.EncodeToPNG(texture)
